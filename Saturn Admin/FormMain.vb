@@ -30,15 +30,29 @@ Public Class FormMain
 
 
 
+        sSql = "Select USERS.USER_ID, coalesce(USER_FIRST_NAME, '') [First Name], coalesce(USER_LAST_NAME, '') [Last Name], "
+        sSql = sSql & "coalesce(USER_LOGIN, '') [Login], coalesce(USER_ROLE_DESCRIPTION, '') [Role], coalesce(USER_JOB_TITLE, ' ') [Job Title], "
+        sSql = sSql & "coalesce(DUMMY_VENDOR_ID, '') [Dummy Vendor ID], USERS_FACILITIES.FACILITY_ID, coalesce(FACILITIES.FACILITY_NAME, '') [Facility] "
+        sSql = sSql & "From USERS Left outer join USERS_ROLES On USERS_ROLES.USER_ROLE = USERS.USER_ROLE "
+        sSql = sSql & "Join USERS_FACILITIES On USERS.USER_ID = USERS_FACILITIES.USER_ID "
+        sSql = sSql & "Join FACILITIES On USERS_FACILITIES.FACILITY_ID = FACILITIES.FACILITY_ID "
+        sSql = sSql & "order by USER_ID, FACILITY_ID "
 
-        sSql = "SELECT users.user_id, ISNULL(user_first_name, '') AS 'First Name', ISNULL(user_last_name, '') AS 'Last Name', "
-        sSql = sSql & "ISNULL(user_login, '') AS 'Login', ISNULL(user_role_description, '') AS 'Role', "
-        sSql = sSql & "ISNULL(user_job_title, ' ') As 'Job Title', ISNULL(dummy_vendor_id, '') AS 'Dummy Vendor ID', users_facilities.facility_id, ISNULL(facilities.facility_name, '') AS 'Facility' "
-        sSql = sSql & "From users, users_facilities, facilities, users_roles "
-        sSql = sSql & "WHERE users.user_id = users_facilities.user_id "
-        sSql = sSql & "AND users_facilities.facility_id = facilities.facility_id "
-        sSql = sSql & "AND users_roles.user_role = users.user_role "
-        sSql = sSql & "ORDER BY user_id, facility_id"
+
+
+
+
+
+
+
+        'sSql = "SELECT users.user_id, ISNULL(user_first_name, '') AS 'First Name', ISNULL(user_last_name, '') AS 'Last Name', "
+        'sSql = sSql & "ISNULL(user_login, '') AS 'Login', ISNULL(user_role_description, '') AS 'Role', "
+        'sSql = sSql & "ISNULL(user_job_title, ' ') As 'Job Title', ISNULL(dummy_vendor_id, '') AS 'Dummy Vendor ID', users_facilities.facility_id, ISNULL(facilities.facility_name, '') AS 'Facility' "
+        'sSql = sSql & "From users, users_facilities, facilities, users_roles "
+        'sSql = sSql & "WHERE users.user_id = users_facilities.user_id "
+        'sSql = sSql & "AND users_facilities.facility_id = facilities.facility_id "
+        'sSql = sSql & "AND users_roles.user_role = users.user_role "
+        'sSql = sSql & "ORDER BY user_id, facility_id"
 
         mycmd.CommandText = sSql
 
@@ -171,57 +185,57 @@ Public Class FormMain
     End Sub
 
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
-        Dim iIndex As Integer
-        Dim sSql As String
-        Dim sCurName As String
+        'Dim iIndex As Integer
+        'Dim sSql As String
+        'Dim sCurName As String
 
 
-        Me.TopMost = False
-        Dim frmAddUser = New FormAddUser
-        Me.TopMost = False
-        GlobalVariables.ResetUser = False
-        frmAddUser.ShowDialog()
+        'Me.TopMost = False
+        'Dim frmAddUser = New FormAddUser
+        'Me.TopMost = False
+        'GlobalVariables.ResetUser = False
+        'frmAddUser.ShowDialog()
 
-        Me.TopMost = True
+        'Me.TopMost = True
 
-        lvUsers.Items.Clear()
+        'lvUsers.Items.Clear()
 
-        If GlobalVariables.ResetUser Then
-            '    Dim sTestProd As String
-            '    sTestProd = GlobalVariables.sEnv
-            '    If sTestProd = "P" Then
-            '        oConn = New SqlConnection("Server=pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
-            '    Else
-            '        oConn = New SqlConnection("Server=pdx-sql16;Database=SATURN_DEV;UID=saturndba;PWD=saturndba")
-            '    End If
+        'If GlobalVariables.ResetUser Then
+        '    Dim sTestProd As String
+        '    sTestProd = GlobalVariables.sEnv
+        '    If sTestProd = "P" Then
+        '        oConn = New SqlConnection("Server=pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
+        '    Else
+        '        oConn = New SqlConnection("Server=pdx-sql16;Database=SATURN_DEV;UID=saturndba;PWD=saturndba")
+        '    End If
 
-            '    Dim myCmd = oConn.CreateCommand
-            '    sSql = "INSERT INTO users"
-            '    sSql = sSql & "(user_first_name, user_last_name, user_login, user_role_description) "
-            '    sSql = sSql & "VALUES ('" & GlobalVariables.CurrentFirstName & "', " & GlobalVariables.CurrentLastName & "', "
-            '    sSql = sSql & "'" & GlobalVariables.CurrentLogin & "', " & GlobalVariables.CurrentRoleDescription & " ') "
-            '    'sSql = sSql & iUserId.ToString() & " ') "
-
-
-            '    myCmd.CommandText = sSql
-            '    oConn.Open()
+        '    Dim myCmd = oConn.CreateCommand
+        '    sSql = "INSERT INTO users"
+        '    sSql = sSql & "(user_first_name, user_last_name, user_login, user_role_description) "
+        '    sSql = sSql & "VALUES ('" & GlobalVariables.CurrentFirstName & "', " & GlobalVariables.CurrentLastName & "', "
+        '    sSql = sSql & "'" & GlobalVariables.CurrentLogin & "', " & GlobalVariables.CurrentRoleDescription & " ') "
+        '    'sSql = sSql & iUserId.ToString() & " ') "
 
 
+        '    myCmd.CommandText = sSql
+        '    oConn.Open()
 
 
 
-            RebuildPage()
-            'sCurName = oCollUsers(GlobalVariables.iAddedUserID.ToString()).UserFisrtName
-            'sCurName = sCurName & " "
-            'sCurName = sCurName & oCollUsers(GlobalVariables.iAddedUserID.ToString()).UserLastName
 
-            'iIndex = lvUsers.FindItemWithText("sCurName")
-            'If iIndex > -1 Then
-            '    lvUsers.SelectedIndices = iIndex
-            'Else
-            '    lvUsers.FocusedItem.Index = 0
-            'End If
-        End If
+
+        ' RebuildPage()
+        'sCurName = oCollUsers(GlobalVariables.iAddedUserID.ToString()).UserFisrtName
+        'sCurName = sCurName & " "
+        'sCurName = sCurName & oCollUsers(GlobalVariables.iAddedUserID.ToString()).UserLastName
+
+        'iIndex = lvUsers.FindItemWithText("sCurName")
+        'If iIndex > -1 Then
+        '    lvUsers.SelectedIndices = iIndex
+        'Else
+        '    lvUsers.FocusedItem.Index = 0
+        'End If
+        'End If
 
 
 

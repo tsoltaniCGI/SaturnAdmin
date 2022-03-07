@@ -46,7 +46,7 @@ Partial Class FormMain
         '
         'btnEditUser
         '
-        Me.btnEditUser.Location = New System.Drawing.Point(609, 36)
+        Me.btnEditUser.Location = New System.Drawing.Point(1010, 42)
         Me.btnEditUser.Name = "btnEditUser"
         Me.btnEditUser.Size = New System.Drawing.Size(75, 23)
         Me.btnEditUser.TabIndex = 4
@@ -55,7 +55,7 @@ Partial Class FormMain
         '
         'btnAdd
         '
-        Me.btnAdd.Location = New System.Drawing.Point(528, 36)
+        Me.btnAdd.Location = New System.Drawing.Point(929, 42)
         Me.btnAdd.Name = "btnAdd"
         Me.btnAdd.Size = New System.Drawing.Size(75, 23)
         Me.btnAdd.TabIndex = 5
@@ -65,10 +65,10 @@ Partial Class FormMain
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.Label1.Location = New System.Drawing.Point(28, 32)
+        Me.Label1.Font = New System.Drawing.Font("Georgia", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.Label1.Location = New System.Drawing.Point(28, 42)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(147, 32)
+        Me.Label1.Size = New System.Drawing.Size(150, 29)
         Me.Label1.TabIndex = 6
         Me.Label1.Text = "Saturn Users"
         '
