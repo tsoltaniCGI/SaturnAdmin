@@ -6,11 +6,14 @@ Imports System.Data.SqlClient
 Public Class FormAddUser
     Dim oFacilityIDs As New Collection
     Dim oUsers As New Collection
+    Dim oCollRoles As New Collection
+
     Private Sub FormAddUser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim oConn As SqlConnection
+
         'oConn = New SqlConnection("Server=pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
         Dim sTestProd As String
-        sTestProd = "P"
+        sTestProd = "T"
         If sTestProd = "P" Then
             oConn = New System.Data.SqlClient.SqlConnection("Server=pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
         Else
@@ -23,30 +26,30 @@ Public Class FormAddUser
 
         'lbFacilities.Sorted = True
 
-        'sSql = "Select users.user_id, users.user_first_name, users.user_last_name, users.user_login, users.user_role, users.user_job_title, users.dummy_vendor_id"
-        sSql = "SELECT users.user_id, users_facilities.facility_id, facilities.facility_name "
-        sSql = sSql & "FROM users, users_facilities, facilities "
-        sSql = sSql & "WHERE users.user_id = users_facilities.user_id "
-        sSql = sSql & "AND users_facilities.facility_id = facilities.facility_id "
-        sSql = sSql & "ORDER By user_first_Name"
+
+        sSql = "SELECT users_facilities.facility_id, facilities.facility_name "
+        sSql = sSql & "FROM users_facilities, facilities "
+        sSql = sSql & "WHERE users_facilities.facility_id = facilities.facility_id "
 
         myCmd.CommandText = sSql
 
         Dim oReader = myCmd.ExecuteReader()
-
+        oFacilityIDs.Clear()
         If oReader.HasRows Then
             iCnt = 0
             Do While oReader.Read()
-                lbFacilities.Items.Add(oReader.GetString(2))
+                lbFacilities.Items.Add(oReader.GetString(1))
                 oFacilityIDs.Add(oReader.GetInt32(0), iCnt.ToString())
                 iCnt = iCnt + 1
             Loop
         End If
 
         oReader.Close()
+        cmbUserRole.DisplayMember = "Text"
+        cmbUserRole.ValueMember = "Value"
 
-        sSql = "SELECT user_role_id, user_role_description  "
-        sSql = sSql & "FROM roles "
+        sSql = "SELECT user_role, user_role_description  "
+        sSql = sSql & "FROM users_roles "
 
 
         myCmd = oConn.CreateCommand()
@@ -55,11 +58,8 @@ Public Class FormAddUser
 
         If oReader.HasRows() Then
             Do While oReader.Read()
-                If oReader.GetInt32(0) <> 0 Then
-                    cmbUserRole.Items.Add(oReader.GetString(1))
-                Else
-                    cmbUserRole.Items.Add("")
-                End If
+                cmbUserRole.Items.Add(oReader.GetString(1))
+                oCollRoles.Add(oReader.GetInt32(0), oReader.GetString(1))
             Loop
         End If
 
@@ -80,6 +80,7 @@ Public Class FormAddUser
 
         Dim sSql As String
         Dim iUserID As Integer
+        Dim iDummyVendorID As Integer
         Dim iFacilityID As Integer
         Dim iVendorID As Integer
         Dim iUserRole As Integer
@@ -129,13 +130,14 @@ Public Class FormAddUser
         End If
 
         If bDataValidated Then
-            GlobalVariables.bUserAdd = True
+            GlobalVariables.ResetUser = True
+            'MessageBox.Show(cmbUserRole.SelectedIndex)
             iFacilityID = 0
-
-            sSql = "INSERT INTO users (user_first_name, user_last_name, user_login, user_role, user_job_title) "
+            iUserRole = oCollRoles(cmbUserRole.SelectedItem)
+            sSql = "INSERT INTO users (user_first_name, user_last_name, user_login, user_role) "
             sSql = sSql & "VALUES ('" & txtUserFirstName.Text & "', '" & txtUserLastName.Text & "', '" & txtUserLogin.Text & "', "
-            sSql = sSql & iUserRole.ToString() & "') "
-            sSql = sSql & "; SELECT @@IDENTITY"
+            sSql = sSql & iUserRole.ToString() & ")"
+            sSql = sSql & "; SELECT @@IDENTITY "
             myCmd.CommandText = sSql
             iUserID = myCmd.ExecuteScalar()
             GlobalVariables.iAddedUserID = iUserID
@@ -145,19 +147,34 @@ Public Class FormAddUser
                 sSql = "INSERT INTO users_facilities (user_id, facility_id) "
                 sSql = sSql & "VALUES (" & iUserID.ToString() & ", " & oFacilityIDs(iIndex.ToString()).ToString() & ")"
                 myCmd.CommandText = sSql
-
+                myCmd.ExecuteNonQuery()
             Next
 
 
+            sSql = "INSERT INTO vendors(vendor_name, vendor_dummy) "
+            sSql = sSql & "VALUES ('" & txtUserLogin.Text.ToUpper() & "', 'Y' ); SELECT @@IDENTITY "
+            myCmd.CommandText = sSql
+            iDummyVendorID = myCmd.ExecuteScalar()
+            GlobalVariables.CurrentDummyVendorID = iDummyVendorID
+
+
+            sSql = "UPDATE users "
+            sSql = sSql & "SET dummy_vendor_id = " & iDummyVendorID.ToString() & " "
+            sSql = sSql & "WHERE user_id = " & iUserID.ToString()
+            myCmd.CommandText = sSql
+            myCmd.ExecuteNonQuery()
+
+
             For Each iIndex In lbFacilities.SelectedIndices
-                sSql = "INSERT INTO vendors_facilities (dummy_vendor_id, facility_id) "
-                sSql = sSql & "VALUES (" & GlobalVariables.CurrentDummyVendorID & ", " & oFacilityIDs(iIndex.ToString()).ToString() & ")"
+                sSql = "INSERT INTO vendors_facilities (vendor_id, facility_id) "
+                sSql = sSql & "VALUES (" & iDummyVendorID.ToString() & ", " & oFacilityIDs(iIndex.ToString()).ToString() & ")"
                 myCmd.CommandText = sSql
                 myCmd.ExecuteNonQuery()
             Next
 
 
         End If
+        oConn.Close()
         Me.Close()
     End Sub
 

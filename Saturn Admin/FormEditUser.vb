@@ -5,13 +5,14 @@ Public Class FormEditUser
     Dim oFacilityIDs As New Collection
     Dim oUsers As New Collection
     Dim oVendIDs As New Collection
+    Dim oCollRoles As New Collection
 
     Private Sub FormEditUser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim oCurrentUser As User
         Dim oCurrentFacility As Facility
         Dim sTestProd As String
         Dim oConn As SqlConnection
-        sTestProd = "P"
+        sTestProd = "T"
         If sTestProd = "P" Then
             oConn = New SqlConnection("Server=pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
         Else
@@ -26,32 +27,39 @@ Public Class FormEditUser
         Dim iCnt As Integer
         Dim iMax As Integer
 
+        Me.lblFirstName.Text = GlobalVariables.CurrentUser.UserFirstName
+        Me.lblLastName.Text = GlobalVariables.CurrentUser.UserLastName
 
-        sSql = "SELECT users.user_id, users_facilities.facility_id, facilities.facility_name"
-        sSql = sSql & "FROM users, users_facilities, facilities"
-        sSql = sSql & "WHERE users.user_id = users_facilities.user_id"
-        sSql = sSql & "AND users_facilities.facility_id = facilities.facility_id"
+
+        sSql = "SELECT users_facilities.facility_id, facilities.facility_name "
+        sSql = sSql & "FROM users_facilities, facilities "
+        sSql = sSql & "WHERE users_facilities.facility_id = facilities.facility_id "
 
 
 
         myCmd.CommandText = sSql
 
         Dim oReader = myCmd.ExecuteReader()
-
+        oFacilityIDs.Clear()
         If oReader.HasRows Then
             iCnt = 0
             Do While oReader.Read()
-                lbFacilities.Items.Add(oReader.GetString(2))
-                oFacilityIDs.Add(oReader.GetInt32(1), iCnt.ToString())
+                lbFacilities.Items.Add(oReader.GetString(1))
+                oFacilityIDs.Add(oReader.GetInt32(0), iCnt.ToString())
                 iCnt = iCnt + 1
             Loop
-
         End If
 
+        oReader.Close()
+        cmbUserRole.DisplayMember = "Text"
+        cmbUserRole.ValueMember = "Value"
 
 
-        sSql = "SELECT user_role_id, user_role_description  "
-        sSql = sSql & "FROM roles "
+
+
+        sSql = "SELECT user_role, user_role_description  "
+        sSql = sSql & "FROM users_roles "
+
 
 
         myCmd = oConn.CreateCommand()
@@ -60,37 +68,36 @@ Public Class FormEditUser
 
         If oReader.HasRows() Then
             Do While oReader.Read()
-                If oReader.GetInt32(0) <> 0 Then
-                    cmbUserRole.Items.Add(oReader.GetString(1))
-                Else
-                    cmbUserRole.Items.Add("")
-                End If
+                cmbUserRole.Items.Add(oReader.GetString(1))
+                oCollRoles.Add(oReader.GetInt32(0), oReader.GetString(1))
             Loop
         End If
 
-        oReader.Close()
 
+
+        oReader.Close()
         oConn.Close()
 
-        oCurrentUser = GlobalVariables.CurrentUser
-        txtFirstName.Text = oCurrentUser.UserFirstName
-        txtLastName.Text = oCurrentUser.UserLastName
-        txtLogin.Text = oCurrentUser.UserLogin
-        cmbUserRole.Text = oCurrentUser.UserRole
+
+        'oCurrentUser = GlobalVariables.CurrentUser
+        'txtFirstName.Text = oCurrentUser.UserFirstName
+        'txtLastName.Text = oCurrentUser.UserLastName
+        'txtLogin.Text = oCurrentUser.UserLogin
+        'cmbUserRole.Text = oCurrentUser.UserRole
 
 
 
-        For Each oCurrentFacility In oCurrentUser.FacilityNames
-            iCnt = 0
-            iMax = lbFacilities.Items.Count - 1
-            Do While iCnt <= iMax
-                If oFacilityIDs(iCnt.ToString()) = oCurrentFacility.FacilityId Then
-                    lbFacilities.SelectedIndices.Add(iCnt)
-                End If
-                iCnt = iCnt + 1
-            Loop
+        'For Each oCurrentFacility In oCurrentUser.FacilityNames
+        '    iCnt = 0
+        '    iMax = lbFacilities.Items.Count - 1
+        '    Do While iCnt <= iMax
+        '        If oFacilityIDs(iCnt.ToString()) = oCurrentFacility.FacilityId Then
+        '            lbFacilities.SelectedIndices.Add(iCnt)
+        '        End If
+        '        iCnt = iCnt + 1
+        '    Loop
 
-        Next
+        'Next
 
     End Sub
 
@@ -99,18 +106,25 @@ Public Class FormEditUser
     End Sub
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
+
         Dim sSql As String
         Dim bDataValidated As Boolean
         Dim oCurrentUser As User
         Dim sCollIndex As String
         Dim oConn As SqlConnection
+        Dim iDummyVendorID As Integer
+        Dim oTrans As SqlTransaction
+        Dim iUserRole As Integer
+        Dim iVendorID As Integer
+        Dim oReader As SqlDataReader
 
         oCurrentUser = GlobalVariables.CurrentUser
         GlobalVariables.iAddedUserID = 0
         GlobalVariables.ResetUser = True
 
         Dim sTestProd As String
-        sTestProd = GlobalVariables.sEnv
+        sTestProd = "T"
+        'sTestProd = GlobalVariables.sEnv
         If sTestProd = "P" Then
             oConn = New SqlConnection("Server =pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
         Else
@@ -118,6 +132,9 @@ Public Class FormEditUser
         End If
 
         oConn.Open()
+
+        'oTrans = oConn.BeginTransaction()
+
         Dim myCmd = oConn.CreateCommand
         bDataValidated = True
         If Len(txtFirstName.Text.ToString()) = 0 Then
@@ -146,13 +163,37 @@ Public Class FormEditUser
             bDataValidated = False
         End If
 
+
+        'sSql = "SELECT vendor_id "
+        'sSql = sSql & "FROM vendors "
+        'sSql = sSql & "WHERE vendor_name = " & GlobalVariables.CurrentUser.UserLogin
+        'myCmd.CommandText = sSql
+        ''Conn.Open()
+        'oReader = myCmd.ExecuteReader()
+
+
+        'iVendorID = 0
+        'If oReader.HasRows Then
+        '    Do While oReader.Read()
+        '        iVendorID = oReader.GetInt32(0)
+        '    Loop
+        'End If
+        'oReader.Close()
+        'Conn.Close()
+
+        'myCmd.CommandText = sSql
+        'iVendorID = myCmd.ExecuteScalar()
+        'GlobalVariables.CurrentDummyVendorID = iVendorID
+
+
         If bDataValidated Then
-            sSql = "UPDATE users"
-            sSql = sSql & "SET user_first_name = '" & GlobalVariables.DQuot(txtFirstName.Text.ToString()) & "', "
+            iUserRole = oCollRoles(cmbUserRole.SelectedItem)
+            sSql = "UPDATE users "
+            sSql = sSql & "Set user_first_name = '" & GlobalVariables.DQuot(txtFirstName.Text.ToString()) & "', "
             sSql = sSql & "user_last_name = '" & GlobalVariables.DQuot(txtLastName.Text.ToString()) & "', "
             sSql = sSql & "user_login = '" & GlobalVariables.DQuot(txtLogin.Text.ToString()) & "', "
-            sSql = sSql & "user_job_title = '" & GlobalVariables.DQuot(txtJobTitle.ToString()) & "', "
-            sSql = sSql & "user_role_description = '" & GlobalVariables.DQuot(cmbUserRole.ToString()) & "', "
+            sSql = sSql & "user_role = '" & iUserRole.ToString() & "' "
+            'sSql = sSql & "user_role = '" & GlobalVariables.DQuot(cmbUserRole.ToString()) & "' "
             sSql = sSql & "WHERE user_id = " & GlobalVariables.CurrentUser.UserID.ToString()
 
             myCmd.CommandText = sSql
@@ -162,8 +203,25 @@ Public Class FormEditUser
             GlobalVariables.CurrentUser.UserFirstName = txtFirstName.Text.ToString()
             GlobalVariables.CurrentUser.UserLastName = txtLastName.Text.ToString()
             GlobalVariables.CurrentUser.UserLogin = txtLogin.Text.ToString()
-            GlobalVariables.CurrentUser.UserJobTitle = txtJobTitle.Text.ToString()
             GlobalVariables.CurrentUser.UserRole = cmbUserRole.SelectedItem.ToString()
+
+            'oCurrentUser = GlobalVariables.CurrentUser
+
+            'oTrans = oConn.BeginTransaction()
+            'myCmd.Connection = oConn
+            'myCmd.Transaction = oTrans
+
+
+            sSql = "DELETE FROM users_facilities "
+            sSql = sSql & "WHERE user_id = " & GlobalVariables.CurrentUser.UserID.ToString()
+            myCmd.CommandText = sSql
+            myCmd.ExecuteNonQuery()
+
+            sSql = "DELETE FROM vendors_facilities "
+            sSql = sSql & "WHERE vendor_id = " & GlobalVariables.CurrentDummyVendorID.ToString()
+            myCmd.CommandText = sSql
+            myCmd.ExecuteNonQuery()
+
 
             GlobalVariables.CurrentUser.FacilityNames.Clear()
             For Each iIndex In lbFacilities.SelectedIndices
@@ -172,18 +230,32 @@ Public Class FormEditUser
                 sSql = sSql & "VALUES (" & GlobalVariables.CurrentUser.UserID.ToString() & ", " & oFacilityIDs(iIndex.ToString()).ToString() & ")"
                 myCmd.CommandText = sSql
                 myCmd.ExecuteNonQuery()
-                GlobalVariables.CurrentUser.FacilityNames.Add(GlobalVariables.FacilityList(sCollIndex))
+                'GlobalVariables.CurrentUser.FacilityNames.Add(GlobalVariables.FacilityList(sCollIndex))
             Next
+
 
 
             For Each iIndex In lbFacilities.SelectedIndices
-                sSql = "INSERT INTO vendors_facilities (dummy_vendor_id, facility_id) "
-                sSql = sSql & "VALUES (" & GlobalVariables.CurrentDummyVendorID & ", " & oFacilityIDs(iIndex.ToString()).ToString() & ")"
+                sSql = "INSERT INTO vendors_facilities (vendor_id, facility_id) "
+                sSql = sSql & "VALUES (" & GlobalVariables.CurrentDummyVendorID.ToString() & ", " & oFacilityIDs(iIndex.ToString()).ToString() & ")"
                 myCmd.CommandText = sSql
                 myCmd.ExecuteNonQuery()
+                'DummyVendorID = myCmd.ExecuteScalar()
+                'lobalVariables.CurrentDummyVendorID = iDummyVendorID
             Next
 
-            Me.Close()
+            sSql = "UPDATE vendors "
+            sSql = sSql & "SET vendor_name = '" & txtLogin.Text.ToUpper() & "' "
+            sSql = sSql & "WHERE vendor_id = " & GlobalVariables.CurrentDummyVendorID.ToString()
+            myCmd.CommandText = sSql
+            myCmd.ExecuteNonQuery()
+
+            'oTrans.Commit()
+            'Me.Close()
+
+            If MessageBox.Show("Name: " & GlobalVariables.CurrentUser.UserFirstName & " " & GlobalVariables.CurrentUser.UserLastName & vbCrLf & "Login : " & GlobalVariables.CurrentUser.UserLogin & vbCrLf & "Role: " & GlobalVariables.CurrentUser.UserRole & vbCrLf & vbCrLf & " Do you approve?", " ", MessageBoxButtons.YesNo) = Windows.Forms.DialogResult.Yes Then
+                Me.Close()
+            End If
 
         End If
 
@@ -193,5 +265,24 @@ Public Class FormEditUser
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
         Me.Close()
+    End Sub
+
+    Private Sub lblLastName_Click(sender As Object, e As EventArgs) Handles lblLastName.Click
+
+    End Sub
+
+    Dim a As String
+    Dim b As String
+
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        If Len(txtFirstName.Text.ToString()) >= 1 Then
+            Dim FirstLetter As String
+            FirstLetter = txtFirstName.Text.Substring(0, 1)
+            a = FirstLetter.ToString()
+            b = txtLastName.Text.ToString()
+
+            txtLogin.Text = a + b
+        End If
     End Sub
 End Class

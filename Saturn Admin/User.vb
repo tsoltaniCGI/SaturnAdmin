@@ -48,6 +48,7 @@ Public Class GlobalVariables
     Public Shared CurrentFirstName As String
     Public Shared CurrentLastName As String
     Public Shared CurrentRoleDescription As String
+    Public Shared CurrentUserRole As Integer
     Public Shared CurrentLogin As String
     Public Shared CurrentDummyVendorID As Integer
 

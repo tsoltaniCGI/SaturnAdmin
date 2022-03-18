@@ -11,7 +11,7 @@ Public Class FormMain
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Dim sTestProd As String
-        sTestProd = "P"
+        sTestProd = "T"
         If sTestProd = "P" Then
             oConn = New System.Data.SqlClient.SqlConnection("Server=pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
         Else
@@ -36,33 +36,13 @@ Public Class FormMain
         sSql = sSql & "From USERS Left outer join USERS_ROLES On USERS_ROLES.USER_ROLE = USERS.USER_ROLE "
         sSql = sSql & "Join USERS_FACILITIES On USERS.USER_ID = USERS_FACILITIES.USER_ID "
         sSql = sSql & "Join FACILITIES On USERS_FACILITIES.FACILITY_ID = FACILITIES.FACILITY_ID "
-        sSql = sSql & "order by USER_ID, FACILITY_ID "
-
-
-
-
-
-
-
-
-        'sSql = "SELECT users.user_id, ISNULL(user_first_name, '') AS 'First Name', ISNULL(user_last_name, '') AS 'Last Name', "
-        'sSql = sSql & "ISNULL(user_login, '') AS 'Login', ISNULL(user_role_description, '') AS 'Role', "
-        'sSql = sSql & "ISNULL(user_job_title, ' ') As 'Job Title', ISNULL(dummy_vendor_id, '') AS 'Dummy Vendor ID', users_facilities.facility_id, ISNULL(facilities.facility_name, '') AS 'Facility' "
-        'sSql = sSql & "From users, users_facilities, facilities, users_roles "
-        'sSql = sSql & "WHERE users.user_id = users_facilities.user_id "
-        'sSql = sSql & "AND users_facilities.facility_id = facilities.facility_id "
-        'sSql = sSql & "AND users_roles.user_role = users.user_role "
-        'sSql = sSql & "ORDER BY user_id, facility_id"
+        sSql = sSql & "order by USER_FIRST_NAME, FACILITY_ID "
 
         mycmd.CommandText = sSql
-
         oConn.Open()
-
         oReader = mycmd.ExecuteReader()
 
-
-
-
+        oCollUserFacility.Clear()
 
         If oReader.HasRows Then
             iNum = 1
@@ -96,6 +76,7 @@ Public Class FormMain
                 'lbUsers.Items.Add(oCollUserFacility(iCnt).UserFristName)
 
                 Dim oUser As New User
+                oUser.UserID = oCollUserFacility(iCnt).UserID
                 oUser.UserFirstName = oCollUserFacility(iCnt).UserFirstName
                 oUser.UserLastName = oCollUserFacility(iCnt).UserLastName
                 oUser.UserLogin = oCollUserFacility(iCnt).UserLogin
@@ -106,14 +87,6 @@ Public Class FormMain
 
                 'iFacilityId = -1
                 Do While iUserId = oCollUserFacility(iCnt).UserId
-                    'If iFacilityId <> oCollUserFacility(iCnt).FacilityId Then
-                    '    iFacilityId = oCollUserFacility(iCnt).FacilityId
-
-                    'Dim oFacility As New Facility()
-                    '    oFacility.FacilityName = oCollUserFacility(iCnt).FacilityName
-                    '    oFacility.FacilityId = iFacilityId
-                    '    oUser.FacilityName.Add(oFacility)
-                    'End If
                     oUser.FacilityNames.Add(oCollUserFacility(iCnt).FacilityName)
                     oUser.FacilityIds.Add(oCollUserFacility(iCnt).FacilityId)
                     iCnt = iCnt + 1
@@ -123,9 +96,13 @@ Public Class FormMain
                     End If
                 Loop
                 oCollUsers.Add(oUser)
-
+                If iCnt >= iMax Then
+                    Exit Do
+                End If
             End If
         Loop
+
+        'GlobalVariables.CurrentUser = oCollUsers(lvUsers.SelectedIndices(0) + 1)
 
         lbFacilities.Sorted = True
 
@@ -150,16 +127,10 @@ Public Class FormMain
         lvUsers.Columns(1).Text = "Last Name"
         lvUsers.Columns(2).Text = "Login"
         lvUsers.Columns(3).Text = "Role"
-        lvUsers.Columns(3).Text = "Job Title"
+
 
     End Sub
 
-
-
-
-    'Private Sub dgvUsers_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvUsers.CellContentClick
-
-    'End Sub
 
     Private Sub lvUsers_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lvUsers.SelectedIndexChanged
         Dim iCnt As Integer
@@ -168,9 +139,8 @@ Public Class FormMain
 
         If lvUsers.SelectedIndices.Count >= 1 Then
             iMax = oCollUsers(lvUsers.SelectedIndices(0) + 1).FacilityNames.Count
-            'iMax = oCollUsers(lvUsers.SelectedItems(0).Index + 1).FacilityNames.Count
-            'iMax = oCollUsers(lvUsers.FocusedItem.Index + 1).FacilityNames.Count
-
+            GlobalVariables.CurrentUser = oCollUsers(lvUsers.SelectedIndices(0) + 1)
+            GlobalVariables.CurrentDummyVendorID = GlobalVariables.CurrentUser.DummyVendorId
             iCnt = 1
             lbFacilities.Items.Clear()
             Do While iCnt <= iMax
@@ -185,59 +155,55 @@ Public Class FormMain
     End Sub
 
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
-        'Dim iIndex As Integer
-        'Dim sSql As String
-        'Dim sCurName As String
+        Dim iIndex As Integer
+        Dim sSql As String
+        Dim oNewUser As New User
 
 
-        'Me.TopMost = False
-        'Dim frmAddUser = New FormAddUser
-        'Me.TopMost = False
-        'GlobalVariables.ResetUser = False
-        'frmAddUser.ShowDialog()
+
+        Me.TopMost = False
+        Dim frmAddUser = New FormAddUser
+        Me.TopMost = False
+        GlobalVariables.ResetUser = False
+        frmAddUser.ShowDialog()
 
         'Me.TopMost = True
 
-        'lvUsers.Items.Clear()
+        lvUsers.Items.Clear()
 
-        'If GlobalVariables.ResetUser Then
-        '    Dim sTestProd As String
-        '    sTestProd = GlobalVariables.sEnv
-        '    If sTestProd = "P" Then
-        '        oConn = New SqlConnection("Server=pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
-        '    Else
-        '        oConn = New SqlConnection("Server=pdx-sql16;Database=SATURN_DEV;UID=saturndba;PWD=saturndba")
-        '    End If
+        If GlobalVariables.ResetUser Then
 
-        '    Dim myCmd = oConn.CreateCommand
-        '    sSql = "INSERT INTO users"
-        '    sSql = sSql & "(user_first_name, user_last_name, user_login, user_role_description) "
-        '    sSql = sSql & "VALUES ('" & GlobalVariables.CurrentFirstName & "', " & GlobalVariables.CurrentLastName & "', "
-        '    sSql = sSql & "'" & GlobalVariables.CurrentLogin & "', " & GlobalVariables.CurrentRoleDescription & " ') "
-        '    'sSql = sSql & iUserId.ToString() & " ') "
+            RebuildPage()
+            lvUsers.Sort()
 
-
-        '    myCmd.CommandText = sSql
-        '    oConn.Open()
+        End If
 
 
 
 
+    End Sub
 
-        ' RebuildPage()
-        'sCurName = oCollUsers(GlobalVariables.iAddedUserID.ToString()).UserFisrtName
-        'sCurName = sCurName & " "
-        'sCurName = sCurName & oCollUsers(GlobalVariables.iAddedUserID.ToString()).UserLastName
+    Private Sub btnEditUser_Click(sender As Object, e As EventArgs) Handles btnEditUser.Click
+        Dim iCurIndex As Integer
+        Dim iCnt As Integer
+        Dim iMax As Integer
 
-        'iIndex = lvUsers.FindItemWithText("sCurName")
-        'If iIndex > -1 Then
-        '    lvUsers.SelectedIndices = iIndex
-        'Else
-        '    lvUsers.FocusedItem.Index = 0
-        'End If
-        'End If
+        Me.TopMost = False
+        Dim frmEditUser = New FormEditUser
+        Me.TopMost = False
+        GlobalVariables.ResetUser = False
+        frmEditUser.ShowDialog()
+
+        'Me.TopMost = True
+
+        lvUsers.Items.Clear()
+
+        If GlobalVariables.ResetUser Then
+
+            RebuildPage()
 
 
+        End If
 
 
     End Sub
