@@ -36,7 +36,7 @@ Public Class FormMain
         sSql = sSql & "From USERS Left outer join USERS_ROLES On USERS_ROLES.USER_ROLE = USERS.USER_ROLE "
         sSql = sSql & "Join USERS_FACILITIES On USERS.USER_ID = USERS_FACILITIES.USER_ID "
         sSql = sSql & "Join FACILITIES On USERS_FACILITIES.FACILITY_ID = FACILITIES.FACILITY_ID "
-        sSql = sSql & "order by USER_FIRST_NAME, FACILITY_ID "
+        sSql = sSql & "order by USERS.USER_ID, FACILITY_ID "
 
         mycmd.CommandText = sSql
         oConn.Open()
