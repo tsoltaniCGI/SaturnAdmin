@@ -11,7 +11,7 @@ Public Class FormMain
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Dim sTestProd As String
-        sTestProd = "T"
+        sTestProd = "P"
         If sTestProd = "P" Then
             oConn = New System.Data.SqlClient.SqlConnection("Server=pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
         Else
@@ -187,24 +187,27 @@ Public Class FormMain
         Dim iCurIndex As Integer
         Dim iCnt As Integer
         Dim iMax As Integer
+        If lvUsers.SelectedItems.Count < 1 Then
+            MessageBox.Show("No User is Selected")
+        Else
 
-        Me.TopMost = False
-        Dim frmEditUser = New FormEditUser
-        Me.TopMost = False
-        GlobalVariables.ResetUser = False
-        frmEditUser.ShowDialog()
+            Me.TopMost = False
+            Dim frmEditUser = New FormEditUser
+            Me.TopMost = False
+            GlobalVariables.ResetUser = False
+            frmEditUser.ShowDialog()
 
-        'Me.TopMost = True
+            'Me.TopMost = True
 
-        lvUsers.Items.Clear()
+            lvUsers.Items.Clear()
 
-        If GlobalVariables.ResetUser Then
+            If GlobalVariables.ResetUser Then
 
-            RebuildPage()
+                RebuildPage()
 
 
+            End If
         End If
-
 
     End Sub
 

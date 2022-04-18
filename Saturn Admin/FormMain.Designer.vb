@@ -31,6 +31,7 @@ Partial Class FormMain
         Me.LastName = New System.Windows.Forms.ColumnHeader()
         Me.Login = New System.Windows.Forms.ColumnHeader()
         Me.Role = New System.Windows.Forms.ColumnHeader()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'lbFacilities
@@ -38,7 +39,7 @@ Partial Class FormMain
         Me.lbFacilities.BackColor = System.Drawing.Color.White
         Me.lbFacilities.FormattingEnabled = True
         Me.lbFacilities.ItemHeight = 15
-        Me.lbFacilities.Location = New System.Drawing.Point(527, 104)
+        Me.lbFacilities.Location = New System.Drawing.Point(523, 95)
         Me.lbFacilities.Name = "lbFacilities"
         Me.lbFacilities.Size = New System.Drawing.Size(284, 469)
         Me.lbFacilities.TabIndex = 2
@@ -47,7 +48,7 @@ Partial Class FormMain
         '
         Me.btnEditUser.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(243, Byte), Integer), CType(CType(243, Byte), Integer))
         Me.btnEditUser.ForeColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(97, Byte), Integer), CType(CType(110, Byte), Integer))
-        Me.btnEditUser.Location = New System.Drawing.Point(732, 42)
+        Me.btnEditUser.Location = New System.Drawing.Point(732, 17)
         Me.btnEditUser.Name = "btnEditUser"
         Me.btnEditUser.Size = New System.Drawing.Size(75, 23)
         Me.btnEditUser.TabIndex = 4
@@ -58,7 +59,7 @@ Partial Class FormMain
         '
         Me.btnAdd.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(243, Byte), Integer), CType(CType(243, Byte), Integer))
         Me.btnAdd.ForeColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(97, Byte), Integer), CType(CType(110, Byte), Integer))
-        Me.btnAdd.Location = New System.Drawing.Point(651, 42)
+        Me.btnAdd.Location = New System.Drawing.Point(651, 17)
         Me.btnAdd.Name = "btnAdd"
         Me.btnAdd.Size = New System.Drawing.Size(75, 23)
         Me.btnAdd.TabIndex = 5
@@ -68,11 +69,11 @@ Partial Class FormMain
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Georgia", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.Label1.Font = New System.Drawing.Font("Georgia", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(97, Byte), Integer), CType(CType(110, Byte), Integer))
-        Me.Label1.Location = New System.Drawing.Point(31, 47)
+        Me.Label1.Location = New System.Drawing.Point(31, 61)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(150, 29)
+        Me.Label1.Size = New System.Drawing.Size(120, 23)
         Me.Label1.TabIndex = 6
         Me.Label1.Text = "Saturn Users"
         '
@@ -83,10 +84,10 @@ Partial Class FormMain
         Me.lvUsers.ForeColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(243, Byte), Integer), CType(CType(243, Byte), Integer))
         Me.lvUsers.FullRowSelect = True
         Me.lvUsers.HideSelection = False
-        Me.lvUsers.Location = New System.Drawing.Point(28, 104)
+        Me.lvUsers.Location = New System.Drawing.Point(28, 95)
         Me.lvUsers.MultiSelect = False
         Me.lvUsers.Name = "lvUsers"
-        Me.lvUsers.Size = New System.Drawing.Size(475, 468)
+        Me.lvUsers.Size = New System.Drawing.Size(475, 469)
         Me.lvUsers.TabIndex = 7
         Me.lvUsers.UseCompatibleStateImageBehavior = False
         '
@@ -106,12 +107,24 @@ Partial Class FormMain
         '
         Me.Role.Width = 100
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Georgia", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(97, Byte), Integer), CType(CType(110, Byte), Integer))
+        Me.Label2.Location = New System.Drawing.Point(524, 62)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(87, 23)
+        Me.Label2.TabIndex = 8
+        Me.Label2.Text = "Facilities"
+        '
         'FormMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(840, 584)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.lvUsers)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.btnAdd)
@@ -132,4 +145,5 @@ Partial Class FormMain
     Friend WithEvents LastName As ColumnHeader
     Friend WithEvents Login As ColumnHeader
     Friend WithEvents Role As ColumnHeader
+    Friend WithEvents Label2 As Label
 End Class

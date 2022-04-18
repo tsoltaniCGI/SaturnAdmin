@@ -12,7 +12,7 @@ Public Class FormEditUser
         Dim oCurrentFacility As Facility
         Dim sTestProd As String
         Dim oConn As SqlConnection
-        sTestProd = "T"
+        sTestProd = "P"
         If sTestProd = "P" Then
             oConn = New SqlConnection("Server=pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
         Else
@@ -29,6 +29,7 @@ Public Class FormEditUser
 
         Me.lblFirstName.Text = GlobalVariables.CurrentUser.UserFirstName
         Me.lblLastName.Text = GlobalVariables.CurrentUser.UserLastName
+        Me.lblRole.Text = GlobalVariables.CurrentUser.UserRole
 
 
         sSql = "SELECT users_facilities.facility_id, facilities.facility_name "
@@ -106,7 +107,7 @@ Public Class FormEditUser
     End Sub
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
-
+        GlobalVariables.ResetUser = True
         Dim sSql As String
         Dim bDataValidated As Boolean
         Dim oCurrentUser As User
@@ -123,7 +124,7 @@ Public Class FormEditUser
         GlobalVariables.ResetUser = True
 
         Dim sTestProd As String
-        sTestProd = "T"
+        sTestProd = "P"
         'sTestProd = GlobalVariables.sEnv
         If sTestProd = "P" Then
             oConn = New SqlConnection("Server =pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
@@ -187,6 +188,7 @@ Public Class FormEditUser
 
 
         If bDataValidated Then
+            GlobalVariables.ResetUser = True
             iUserRole = oCollRoles(cmbUserRole.SelectedItem)
             sSql = "UPDATE users "
             sSql = sSql & "Set user_first_name = '" & GlobalVariables.DQuot(txtFirstName.Text.ToString()) & "', "
@@ -257,6 +259,8 @@ Public Class FormEditUser
                 Me.Close()
             End If
 
+
+
         End If
 
 
@@ -275,7 +279,7 @@ Public Class FormEditUser
     Dim b As String
 
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
         If Len(txtFirstName.Text.ToString()) >= 1 Then
             Dim FirstLetter As String
             FirstLetter = txtFirstName.Text.Substring(0, 1)
@@ -284,5 +288,17 @@ Public Class FormEditUser
 
             txtLogin.Text = a + b
         End If
+    End Sub
+
+    Private Sub txtFirstName_TextChanged(sender As Object, e As EventArgs) Handles txtFirstName.TextChanged
+
+    End Sub
+
+    Private Sub Label5_Click(sender As Object, e As EventArgs) Handles Label5.Click
+
+    End Sub
+
+    Private Sub txtLogin_TextChanged(sender As Object, e As EventArgs) Handles txtLogin.TextChanged
+
     End Sub
 End Class

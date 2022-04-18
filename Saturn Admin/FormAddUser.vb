@@ -13,7 +13,7 @@ Public Class FormAddUser
 
         'oConn = New SqlConnection("Server=pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
         Dim sTestProd As String
-        sTestProd = "T"
+        sTestProd = "P"
         If sTestProd = "P" Then
             oConn = New System.Data.SqlClient.SqlConnection("Server=pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
         Else
@@ -90,7 +90,7 @@ Public Class FormAddUser
         'oConn = New SqlConnection("Server=pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
 
         Dim sTestProd As String
-        sTestProd = "T"
+        sTestProd = "P"
         If sTestProd = "P" Then
             oConn = New System.Data.SqlClient.SqlConnection("Server=pdx-sql14;Database=SATURN_PROD;UID=saturndba;PWD=saturndba")
         Else
@@ -175,10 +175,25 @@ Public Class FormAddUser
 
         End If
         oConn.Close()
+        'If MessageBox.Show("Name: " & GlobalVariables.CurrentUser.UserFirstName & " " & GlobalVariables.CurrentUser.UserLastName & vbCrLf & "Login : " & GlobalVariables.CurrentUser.UserLogin & vbCrLf & "Role: " & GlobalVariables.CurrentUser.UserRole & vbCrLf & vbCrLf & " Do you approve?", " ", MessageBoxButtons.YesNo) = Windows.Forms.DialogResult.Yes Then
         Me.Close()
+        'End If
+
     End Sub
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
         Me.Close()
+    End Sub
+    Dim a As String
+    Dim b As String
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        If Len(txtUserFirstName.Text.ToString()) >= 1 Then
+            Dim FirstLetter As String
+            FirstLetter = txtUserFirstName.Text.Substring(0, 1)
+            a = FirstLetter.ToString()
+            b = txtUserLastName.Text.ToString()
+
+            txtUserLogin.Text = a + b
+        End If
     End Sub
 End Class

@@ -31,38 +31,41 @@ Partial Class FormAddUser
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lbFacilities
         '
         Me.lbFacilities.FormattingEnabled = True
         Me.lbFacilities.ItemHeight = 15
-        Me.lbFacilities.Location = New System.Drawing.Point(496, 35)
+        Me.lbFacilities.Location = New System.Drawing.Point(429, 95)
         Me.lbFacilities.Name = "lbFacilities"
         Me.lbFacilities.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple
-        Me.lbFacilities.Size = New System.Drawing.Size(194, 364)
+        Me.lbFacilities.Size = New System.Drawing.Size(194, 439)
         Me.lbFacilities.TabIndex = 0
         '
         'txtUserFirstName
         '
-        Me.txtUserFirstName.Location = New System.Drawing.Point(117, 35)
+        Me.txtUserFirstName.Location = New System.Drawing.Point(222, 102)
         Me.txtUserFirstName.Name = "txtUserFirstName"
         Me.txtUserFirstName.Size = New System.Drawing.Size(100, 23)
         Me.txtUserFirstName.TabIndex = 1
         '
         'txtUserLastName
         '
-        Me.txtUserLastName.Location = New System.Drawing.Point(117, 85)
+        Me.txtUserLastName.Location = New System.Drawing.Point(222, 152)
         Me.txtUserLastName.Name = "txtUserLastName"
         Me.txtUserLastName.Size = New System.Drawing.Size(100, 23)
         Me.txtUserLastName.TabIndex = 2
         '
         'txtUserLogin
         '
-        Me.txtUserLogin.Location = New System.Drawing.Point(117, 139)
+        Me.txtUserLogin.Location = New System.Drawing.Point(222, 389)
         Me.txtUserLogin.Name = "txtUserLogin"
         Me.txtUserLogin.Size = New System.Drawing.Size(100, 23)
         Me.txtUserLogin.TabIndex = 3
@@ -70,33 +73,39 @@ Partial Class FormAddUser
         'cmbUserRole
         '
         Me.cmbUserRole.FormattingEnabled = True
-        Me.cmbUserRole.Location = New System.Drawing.Point(117, 196)
+        Me.cmbUserRole.Location = New System.Drawing.Point(222, 263)
         Me.cmbUserRole.Name = "cmbUserRole"
-        Me.cmbUserRole.Size = New System.Drawing.Size(121, 23)
+        Me.cmbUserRole.Size = New System.Drawing.Size(100, 23)
         Me.cmbUserRole.TabIndex = 5
         '
         'btnOK
         '
-        Me.btnOK.Location = New System.Drawing.Point(255, 415)
+        Me.btnOK.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(243, Byte), Integer), CType(CType(243, Byte), Integer))
+        Me.btnOK.ForeColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(97, Byte), Integer), CType(CType(110, Byte), Integer))
+        Me.btnOK.Location = New System.Drawing.Point(174, 511)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(75, 23)
         Me.btnOK.TabIndex = 6
         Me.btnOK.Text = "OK"
-        Me.btnOK.UseVisualStyleBackColor = True
+        Me.btnOK.UseVisualStyleBackColor = False
         '
         'btnCancel
         '
-        Me.btnCancel.Location = New System.Drawing.Point(433, 415)
+        Me.btnCancel.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(243, Byte), Integer), CType(CType(243, Byte), Integer))
+        Me.btnCancel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(97, Byte), Integer), CType(CType(110, Byte), Integer))
+        Me.btnCancel.Location = New System.Drawing.Point(300, 511)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(75, 23)
         Me.btnCancel.TabIndex = 7
         Me.btnCancel.Text = "Cancel"
-        Me.btnCancel.UseVisualStyleBackColor = True
+        Me.btnCancel.UseVisualStyleBackColor = False
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(32, 38)
+        Me.Label1.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer))
+        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(97, Byte), Integer), CType(CType(110, Byte), Integer))
+        Me.Label1.Location = New System.Drawing.Point(149, 105)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(64, 15)
         Me.Label1.TabIndex = 8
@@ -105,25 +114,20 @@ Partial Class FormAddUser
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(32, 93)
+        Me.Label2.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer))
+        Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(97, Byte), Integer), CType(CType(110, Byte), Integer))
+        Me.Label2.Location = New System.Drawing.Point(149, 157)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(63, 15)
         Me.Label2.TabIndex = 9
         Me.Label2.Text = "Last Name"
         '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(32, 142)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(37, 15)
-        Me.Label3.TabIndex = 10
-        Me.Label3.Text = "Login"
-        '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(39, 199)
+        Me.Label5.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer))
+        Me.Label5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(97, Byte), Integer), CType(CType(110, Byte), Integer))
+        Me.Label5.Location = New System.Drawing.Point(149, 263)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(30, 15)
         Me.Label5.TabIndex = 12
@@ -132,20 +136,55 @@ Partial Class FormAddUser
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(416, 38)
+        Me.Label6.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer))
+        Me.Label6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(97, Byte), Integer), CType(CType(110, Byte), Integer))
+        Me.Label6.Location = New System.Drawing.Point(379, 105)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(44, 15)
         Me.Label6.TabIndex = 13
         Me.Label6.Text = "Facility"
         '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer))
+        Me.PictureBox1.Location = New System.Drawing.Point(137, 71)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(509, 483)
+        Me.PictureBox1.TabIndex = 14
+        Me.PictureBox1.TabStop = False
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Georgia", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point)
+        Me.Label4.ForeColor = System.Drawing.Color.White
+        Me.Label4.Location = New System.Drawing.Point(12, 24)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(127, 29)
+        Me.Label4.TabIndex = 19
+        Me.Label4.Text = "Add User"
+        '
+        'Button1
+        '
+        Me.Button1.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(243, Byte), Integer), CType(CType(243, Byte), Integer))
+        Me.Button1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(97, Byte), Integer), CType(CType(110, Byte), Integer))
+        Me.Button1.Location = New System.Drawing.Point(237, 348)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 20
+        Me.Button1.Text = "Login"
+        Me.Button1.UseVisualStyleBackColor = False
+        '
         'FormAddUser
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(126, Byte), Integer), CType(CType(131, Byte), Integer), CType(CType(150, Byte), Integer))
+        Me.ClientSize = New System.Drawing.Size(665, 586)
+        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.btnCancel)
@@ -155,8 +194,10 @@ Partial Class FormAddUser
         Me.Controls.Add(Me.txtUserLastName)
         Me.Controls.Add(Me.txtUserFirstName)
         Me.Controls.Add(Me.lbFacilities)
+        Me.Controls.Add(Me.PictureBox1)
         Me.Name = "FormAddUser"
         Me.Text = "FormAddUser"
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -171,7 +212,9 @@ Partial Class FormAddUser
     Friend WithEvents btnCancel As Button
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
-    Friend WithEvents Label3 As Label
     Friend WithEvents Label5 As Label
     Friend WithEvents Label6 As Label
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents Label4 As Label
+    Friend WithEvents Button1 As Button
 End Class
