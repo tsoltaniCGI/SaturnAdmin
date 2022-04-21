@@ -30,13 +30,13 @@ Public Class FormMain
 
 
 
-        sSql = "Select USERS.USER_ID, coalesce(USER_FIRST_NAME, '') [First Name], coalesce(USER_LAST_NAME, '') [Last Name], "
+        sSql = "Select DISTINCT USERS.USER_ID, coalesce(USER_FIRST_NAME, '') [First Name], coalesce(USER_LAST_NAME, '') [Last Name], "
         sSql = sSql & "coalesce(USER_LOGIN, '') [Login], coalesce(USER_ROLE_DESCRIPTION, '') [Role], coalesce(USER_JOB_TITLE, ' ') [Job Title], "
         sSql = sSql & "coalesce(DUMMY_VENDOR_ID, '') [Dummy Vendor ID], USERS_FACILITIES.FACILITY_ID, coalesce(FACILITIES.FACILITY_NAME, '') [Facility] "
         sSql = sSql & "From USERS Left outer join USERS_ROLES On USERS_ROLES.USER_ROLE = USERS.USER_ROLE "
         sSql = sSql & "Join USERS_FACILITIES On USERS.USER_ID = USERS_FACILITIES.USER_ID "
         sSql = sSql & "Join FACILITIES On USERS_FACILITIES.FACILITY_ID = FACILITIES.FACILITY_ID "
-        sSql = sSql & "order by USERS.USER_ID, FACILITY_ID "
+        sSql = sSql & "order by USER_ID, FACILITY_ID "
 
         mycmd.CommandText = sSql
         oConn.Open()
@@ -69,7 +69,7 @@ Public Class FormMain
         iCnt = 1
 
         iUserId = -1
-
+        oCollUsers.Clear()
         Do While iCnt <= iMax
             If oCollUserFacility(iCnt).UserId <> iUserId Then
                 iUserId = oCollUserFacility(iCnt).UserId
@@ -97,6 +97,7 @@ Public Class FormMain
                 Loop
                 oCollUsers.Add(oUser)
                 If iCnt >= iMax Then
+                    'oCollUsers.Add(oUser)
                     Exit Do
                 End If
             End If
@@ -174,7 +175,7 @@ Public Class FormMain
         If GlobalVariables.ResetUser Then
 
             RebuildPage()
-            lvUsers.Sort()
+            'lvUsers.Sort()
 
         End If
 
